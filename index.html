@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sam Plett — Immobilienentwicklung</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   RESET & VARIABLES
+═══════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#050E1A;
+  --navy2:#0B1E3A;
+  --navy3:#122848;
+  --orange:#C4782A;
+  --orange2:#E8943A;
+  --orange3:#f5b060;
+  --white:#fff;
+  --muted:rgba(255,255,255,.45);
+  --subtle:rgba(255,255,255,.1);
+}
+html{scroll-behavior:smooth;font-size:16px;}
+body{background:var(--navy);color:var(--white);font-family:Inter,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+
+/* ═══════════════════════════════════════
+   TYPOGRAPHY UTILS
+═══════════════════════════════════════ */
+.playfair{font-family:"Playfair Display",serif;}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.eyebrow-line{width:24px;height:1px;background:var(--orange2);flex-shrink:0;}
+.eyebrow-text{font-size:10px;letter-spacing:4px;color:var(--orange2);text-transform:uppercase;}
+.section-title{font-family:"Playfair Display",serif;font-size:clamp(28px,4vw,52px);font-weight:300;line-height:1.1;margin-bottom:20px;}
+.section-title em{font-style:italic;background:linear-gradient(135deg,var(--orange),var(--orange3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.section-body{font-size:15px;color:rgba(255,255,255,.72);line-height:1.8;}
+.gold-line{width:40px;height:1px;background:linear-gradient(90deg,var(--orange),transparent);margin:20px 0;}
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease;}
+.reveal.in{opacity:1;transform:none;}
+.reveal-left{opacity:0;transform:translateX(-24px);transition:opacity .7s ease,transform .7s ease;}
+.reveal-left.in{opacity:1;transform:none;}
+.reveal-right{opacity:0;transform:translateX(24px);transition:opacity .7s ease,transform .7s ease;}
+.reveal-right.in{opacity:1;transform:none;}
+.slide-up{overflow:hidden;}
+.slide-up-inner{transform:translateY(110%);transition:transform 1s cubic-bezier(.16,1,.3,1);}
+.slide-up-inner.in{transform:none;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+/* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
+#nav{position:fixed;top:0;left:0;right:0;z-index:900;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;transition:background .5s,border .5s;}
+#nav.scrolled{background:rgba(5,14,26,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(196,120,42,.15);}
+.nav-logo{height:48px;mix-blend-mode:screen;}
+.nav-tabs{display:flex;gap:0;}
+.nav-tab{font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:8px 14px;color:rgba(255,255,255,.35);cursor:pointer;transition:color .3s;position:relative;white-space:nowrap;}
+.nav-tab::after{content:"";position:absolute;bottom:0;left:50%;right:50%;height:1px;background:var(--orange2);transition:all .3s;}
+.nav-tab:hover{color:rgba(255,255,255,.8);}
+.nav-tab:hover::after,.nav-tab.active::after{left:14px;right:14px;}
+.nav-tab.active{color:var(--orange2);}
+.nav-cta{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;padding:11px 24px;cursor:pointer;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .3s;white-space:nowrap;}
+.nav-cta:hover{filter:brightness(1.1);transform:translateY(-2px);}
+/* Mobile nav */
+.nav-menu-btn{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;}
+.nav-menu-btn span{width:24px;height:2px;background:#fff;transition:all .3s;display:block;}
+.nav-mobile{display:flex;position:fixed;inset:0;background:rgba(5,14,26,.98);z-index:899;flex-direction:column;align-items:center;justify-content:center;gap:0;}
+.nav-mobile.open{display:flex;}
+.nav-mobile-tab{font-size:22px;letter-spacing:2px;color:rgba(255,255,255,.5);cursor:pointer;padding:18px;transition:color .3s;text-transform:uppercase;font-weight:300;}
+.nav-mobile-tab:hover{color:var(--orange2);}
+.nav-mobile-cta{margin-top:24px;background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;font-size:13px;font-weight:700;letter-spacing:2px;padding:14px 36px;cursor:pointer;}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+#hero{min-height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;}
+.hero-bg{position:absolute;inset:-15%;background-size:cover;background-position:center;filter:brightness(.22) saturate(.5);}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(5,14,26,.98) 0%,rgba(11,30,58,.75) 45%,rgba(5,14,26,.88) 100%);}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 60% 50%,rgba(196,120,42,.1) 0%,transparent 60%);}
+/* Portrait */
+.hero-portrait{position:absolute;right:0;top:0;bottom:0;width:48%;overflow:hidden;}
+.hero-portrait img{position:absolute;bottom:0;right:0;width:100%;height:110%;object-fit:cover;object-position:top center;}
+.hero-portrait-fade{position:absolute;inset:0;background:linear-gradient(to right,var(--navy) 0%,rgba(5,14,26,.25) 28%,transparent 54%),linear-gradient(to bottom,transparent 15%,rgba(5,14,26,.25) 82%,var(--navy) 100%);}
+/* Content */
+.hero-content{position:relative;z-index:2;padding:120px 48px 80px;width:56%;max-width:760px;}
+.hero-badge{display:flex;align-items:center;gap:12px;margin-bottom:28px;animation:fadeIn .8s .2s both;}
+.hero-badge-line{width:32px;height:1px;background:var(--orange2);}
+.hero-badge-text{font-size:10px;letter-spacing:5px;color:var(--orange2);text-transform:uppercase;}
+.hero-h1{font-family:"Playfair Display",serif;font-size:clamp(38px,5vw,72px);font-weight:300;line-height:1.06;margin-bottom:6px;}
+.hero-h1.line1{animation:heroSlide .9s .3s both;}
+.hero-h1.line2{animation:heroSlide .9s .45s both;}
+.hero-h1 em{font-style:italic;background:linear-gradient(135deg,var(--orange),var(--orange3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+@keyframes heroSlide{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:none;}}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.8;max-width:480px;margin:24px 0 40px;animation:fadeIn .8s .65s both;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;animation:fadeIn .7s .82s both;}
+.btn-primary{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;padding:14px 32px;cursor:pointer;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .3s;white-space:nowrap;}
+.btn-primary:hover{filter:brightness(1.12);transform:translateY(-3px);}
+.btn-outline{border:1px solid rgba(196,120,42,.4);color:rgba(255,255,255,.65);font-size:11px;letter-spacing:2px;padding:14px 32px;cursor:pointer;transition:all .3s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);white-space:nowrap;}
+.btn-outline:hover{border-color:var(--orange2);color:var(--orange2);}
+/* Scroll hint */
+.hero-scroll{position:absolute;bottom:32px;left:48px;display:flex;align-items:center;gap:14px;animation:fadeIn .8s 1.3s both;opacity:0;}
+.hero-scroll-line{width:1px;height:32px;background:linear-gradient(180deg,transparent,var(--orange2),transparent);}
+.hero-scroll-text{font-size:9px;letter-spacing:4px;color:rgba(255,255,255,.35);text-transform:uppercase;}
+
+/* ═══════════════════════════════════════
+   STATS STRIP
+═══════════════════════════════════════ */
+.stats-strip{background:rgba(196,120,42,.07);border-top:1px solid rgba(196,120,42,.18);display:grid;grid-template-columns:repeat(4,1fr);}
+.stat-item{padding:28px 16px;text-align:center;border-right:1px solid rgba(196,120,42,.08);position:relative;overflow:hidden;cursor:default;}
+.stat-item:last-child{border:none;}
+.stat-item::after{content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:linear-gradient(90deg,var(--orange),var(--orange2));transition:width .5s;}
+.stat-item:hover::after{width:60%;}
+.stat-num{font-family:"Playfair Display",serif;font-size:clamp(32px,4vw,46px);font-weight:300;color:#fff;line-height:1;}
+.stat-unit{font-size:clamp(14px,2vw,18px);color:var(--orange2);font-family:"Playfair Display",serif;}
+.stat-label{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.55);margin-top:6px;text-transform:uppercase;}
+
+/* ═══════════════════════════════════════
+   SECTIONS — shared
+═══════════════════════════════════════ */
+.section{padding:88px 48px;}
+.section-inner{max-width:1200px;margin:0 auto;}
+.section-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.section-grid-2.flip{direction:rtl;}
+.section-grid-2.flip>*{direction:ltr;}
+
+/* ═══════════════════════════════════════
+   GESCHÄFTSMODELL / ARBEITSWEISE
+═══════════════════════════════════════ */
+#arbeitsweise{background:var(--navy);}
+.process-steps{display:flex;flex-direction:column;gap:0;margin-top:40px;}
+.process-step{display:grid;grid-template-columns:56px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid rgba(255,255,255,.06);transition:background .3s;cursor:default;}
+.process-step:last-child{border:none;}
+.process-step:hover{background:rgba(196,120,42,.04);margin:0 -20px;padding:24px 20px;}
+.ps-num{font-family:"Playfair Display",serif;font-size:38px;font-weight:300;color:rgba(196,120,42,.2);line-height:1;padding-top:2px;}
+.ps-body{}
+.ps-title{font-size:15px;font-weight:600;color:#fff;margin-bottom:6px;}
+.ps-desc{font-size:13px;color:rgba(255,255,255,.62);line-height:1.75;}
+.arbeitsweise-img{position:relative;border-radius:4px;overflow:hidden;}
+.arbeitsweise-img img{width:100%;height:580px;object-fit:cover;object-position:top;filter:brightness(.9) contrast(1.05);}
+.arbeitsweise-img-label{position:absolute;bottom:24px;left:24px;background:rgba(5,14,26,.88);padding:12px 18px;border-left:2px solid var(--orange2);}
+.ail-name{font-size:14px;font-weight:600;color:#fff;}
+.ail-role{font-size:10px;letter-spacing:2px;color:var(--orange2);text-transform:uppercase;margin-top:2px;}
+
+/* ═══════════════════════════════════════
+   QUOTE PARALLAX
+═══════════════════════════════════════ */
+.quote-section{height:55vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.qsec-bg{position:absolute;inset:-20%;background-size:cover;background-position:center;}
+.qsec-overlay{position:absolute;inset:0;}
+.qsec-content{position:relative;z-index:2;text-align:center;padding:0 48px;max-width:900px;}
+.qsec-quote{font-family:"Playfair Display",serif;font-size:clamp(18px,2.5vw,34px);font-style:italic;color:#fff;line-height:1.5;}
+.qsec-quote em{font-style:italic;background:linear-gradient(135deg,var(--orange),var(--orange3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.qsec-author{font-size:10px;letter-spacing:5px;color:rgba(255,255,255,.3);margin-top:20px;text-transform:uppercase;}
+
+/* ═══════════════════════════════════════
+   SUCHPROFIL
+═══════════════════════════════════════ */
+#suchprofil{background:var(--navy2);}
+.criteria-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(196,120,42,.1);margin-top:32px;}
+.crit-item{background:var(--navy2);padding:20px 22px;display:flex;gap:14px;align-items:flex-start;transition:background .3s;cursor:default;}
+.crit-item:hover{background:rgba(196,120,42,.07);}
+.crit-dot{width:5px;height:5px;background:var(--orange2);border-radius:50%;margin-top:7px;flex-shrink:0;}
+.crit-label{font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.25);text-transform:uppercase;margin-bottom:3px;}
+.crit-value{font-size:13px;color:rgba(255,255,255,.8);}
+.suchprofil-cta{margin-top:28px;padding:24px;border:1px solid rgba(196,120,42,.2);background:rgba(196,120,42,.05);}
+.suchprofil-cta-title{font-size:10px;letter-spacing:3px;color:var(--orange2);text-transform:uppercase;margin-bottom:8px;}
+.suchprofil-cta-text{font-size:13px;color:var(--muted);margin-bottom:16px;}
+.suchprofil-img{position:relative;overflow:hidden;border-radius:4px;}
+.suchprofil-img img{width:100%;height:100%;min-height:500px;object-fit:cover;filter:brightness(.45) saturate(.6);}
+.suchprofil-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(11,30,58,.4),rgba(5,14,26,.2));}
+
+/* ═══════════════════════════════════════
+   BIG NUMBER BANNER
+═══════════════════════════════════════ */
+.big-banner{height:48vh;min-height:280px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.bb-bg{position:absolute;inset:-20%;background-size:cover;background-position:center;}
+.bb-overlay{position:absolute;inset:0;}
+.bb-content{position:relative;z-index:2;text-align:center;}
+.bb-label{font-size:10px;letter-spacing:6px;color:var(--orange2);text-transform:uppercase;margin-bottom:12px;}
+.bb-number{font-family:"Playfair Display",serif;font-size:clamp(72px,14vw,160px);font-weight:300;line-height:1;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.04));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.bb-sub{font-size:10px;letter-spacing:5px;color:rgba(255,255,255,.2);text-transform:uppercase;margin-top:8px;}
+
+/* ═══════════════════════════════════════
+   TRACK RECORD
+═══════════════════════════════════════ */
+#trackrecord{background:var(--navy);}
+.tr-intro{max-width:1200px;margin:0 auto;padding:0 0 40px;}
+.tr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(255,255,255,.03);}
+.tr-card{position:relative;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:#0d1520;}
+.tr-card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s ease,filter .7s ease;filter:grayscale(50%) brightness(.45);}
+.tr-card:hover .tr-card-img{transform:scale(1.08);filter:grayscale(0%) brightness(.55);}
+.tr-card-info{position:absolute;bottom:0;left:0;right:0;padding:22px;background:linear-gradient(0deg,rgba(5,14,26,.97) 0%,transparent 100%);transform:translateY(42%);transition:transform .45s cubic-bezier(.16,1,.3,1);}
+.tr-card:hover .tr-card-info{transform:none;}
+.tr-card-city{font-size:9px;letter-spacing:4px;color:var(--orange2);text-transform:uppercase;margin-bottom:5px;}
+.tr-card-name{font-size:13px;font-weight:600;color:#fff;margin-bottom:12px;line-height:1.4;}
+.tr-card-meta{display:grid;grid-template-columns:1fr 1fr;gap:5px;opacity:0;transition:opacity .3s .1s;}
+.tr-card:hover .tr-card-meta{opacity:1;}
+.tr-meta-item{padding:7px 9px;background:rgba(255,255,255,.05);border-left:1px solid rgba(196,120,42,.4);}
+.tr-meta-label{font-size:9px;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:1px;}
+.tr-meta-value{font-size:11px;color:#fff;font-weight:500;margin-top:2px;}
+/* Scroll indicator */
+.tr-scroll-hint{text-align:center;padding:20px;font-size:11px;color:rgba(255,255,255,.2);letter-spacing:2px;text-transform:uppercase;display:none;}
+
+/* ═══════════════════════════════════════
+   ÜBER MICH / LEITBILD
+═══════════════════════════════════════ */
+#ueber{background:var(--navy2);}
+.ueber-layout{display:grid;grid-template-columns:44% 1fr;min-height:80vh;}
+.ueber-photo{position:relative;overflow:hidden;}
+.ueber-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;min-height:600px;}
+.ueber-photo-overlay{position:absolute;inset:0;background:linear-gradient(to right,transparent 0%,rgba(18,40,72,.5) 100%),linear-gradient(180deg,rgba(5,14,26,.5) 0%,transparent 15%,transparent 80%,rgba(5,14,26,.8) 100%);}
+.ueber-photo-label{position:absolute;bottom:32px;left:32px;}
+.upl-name{font-family:"Playfair Display",serif;font-size:20px;font-weight:300;color:#fff;}
+.upl-title{font-size:10px;letter-spacing:3px;color:var(--orange2);text-transform:uppercase;margin-top:4px;}
+.ueber-text{padding:80px 56px;display:flex;flex-direction:column;justify-content:center;}
+.timeline{display:flex;flex-direction:column;margin:28px 0;}
+.tl-item{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.tl-year{font-size:12px;font-weight:700;color:var(--orange2);min-width:50px;padding-top:2px;}
+.tl-bar{width:1px;background:rgba(196,120,42,.2);position:relative;flex-shrink:0;}
+.tl-bar::before{content:"";position:absolute;top:5px;left:-3px;width:7px;height:7px;border-radius:50%;background:var(--orange2);}
+.tl-body{}
+.tl-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:3px;}
+.tl-desc{font-size:12px;color:rgba(255,255,255,.6);line-height:1.65;}
+.quote-bar{padding:24px 26px;border-left:2px solid var(--orange2);background:rgba(196,120,42,.05);margin-top:8px;}
+.quote-bar p{font-family:"Playfair Display",serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.75);line-height:1.6;}
+.quote-bar cite{font-size:9px;letter-spacing:4px;color:var(--orange2);display:block;margin-top:10px;font-style:normal;text-transform:uppercase;}
+
+/* ═══════════════════════════════════════
+   WERTE
+═══════════════════════════════════════ */
+#werte{background:var(--navy);}
+.werte-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.03);margin-top:48px;}
+.wert-card{background:var(--navy);padding:40px 30px;position:relative;overflow:hidden;transition:background .4s;cursor:default;}
+.wert-card:hover{background:var(--navy2);}
+.wert-card::after{content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--orange),var(--orange2));transform:scaleX(0);transition:transform .4s;transform-origin:left;}
+.wert-card:hover::after{transform:scaleX(1);}
+.wert-bg-num{position:absolute;top:-18px;right:8px;font-family:"Playfair Display",serif;font-size:100px;font-weight:300;color:rgba(196,120,42,.04);pointer-events:none;transition:color .4s;}
+.wert-card:hover .wert-bg-num{color:rgba(196,120,42,.09);}
+.wert-icon{width:36px;height:36px;border:1px solid rgba(196,120,42,.2);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.wert-icon svg{stroke:var(--orange2);}
+.wert-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:8px;}
+.wert-desc{font-size:12px;color:rgba(255,255,255,.62);line-height:1.8;}
+
+/* ═══════════════════════════════════════
+   ZIELGRUPPEN
+═══════════════════════════════════════ */
+#zielgruppen{background:var(--navy2);}
+.zg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(196,120,42,.1);margin-top:48px;}
+.zg-card{background:var(--navy2);padding:36px 28px;transition:background .3s;cursor:default;}
+.zg-card:hover{background:rgba(196,120,42,.06);}
+.zg-icon{width:44px;height:44px;border:1px solid rgba(196,120,42,.2);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:all .3s;}
+.zg-card:hover .zg-icon{background:linear-gradient(135deg,var(--orange),var(--orange2));border:none;}
+.zg-card:hover .zg-icon svg{stroke:#fff;}
+.zg-icon svg{stroke:var(--orange2);transition:stroke .3s;}
+.zg-tag{font-size:9px;letter-spacing:3px;color:var(--orange2);text-transform:uppercase;margin-bottom:10px;}
+.zg-title{font-size:16px;font-weight:600;color:#fff;margin-bottom:12px;}
+.zg-desc{font-size:13px;color:rgba(255,255,255,.65);line-height:1.8;}
+
+/* ═══════════════════════════════════════
+   VERTRAUEN / MANIFEST
+═══════════════════════════════════════ */
+#vertrauen{background:var(--navy);}
+.manifest-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+.manifest-photo{position:relative;overflow:hidden;border-radius:4px;}
+.manifest-photo img{width:100%;height:500px;object-fit:cover;object-position:top center;filter:brightness(.88) contrast(1.05);}
+.three-pillars{display:flex;flex-direction:column;gap:0;margin-top:32px;}
+.pillar{padding:20px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.pillar:last-child{border:none;}
+.pillar-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+.pillar-title::before{content:"";width:6px;height:6px;background:var(--orange2);border-radius:50%;flex-shrink:0;}
+.pillar-desc{font-size:13px;color:var(--muted);line-height:1.75;padding-left:16px;}
+
+/* ═══════════════════════════════════════
+   TEAM / NETZWERK
+═══════════════════════════════════════ */
+#team{background:var(--navy2);}
+.team-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+.team-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(196,120,42,.1);margin-top:36px;}
+.ts-item{background:var(--navy2);padding:24px;text-align:center;}
+.ts-num{font-family:"Playfair Display",serif;font-size:38px;font-weight:300;color:#fff;line-height:1;}
+.ts-unit{font-size:14px;color:var(--orange2);}
+.ts-label{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.22);text-transform:uppercase;margin-top:6px;}
+.team-photo{position:relative;overflow:hidden;border-radius:4px;}
+.team-photo img{width:100%;height:520px;object-fit:cover;object-position:top;}
+
+/* ═══════════════════════════════════════
+   KONTAKT
+═══════════════════════════════════════ */
+#kontakt{background:var(--navy3);}
+.kontakt-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.kontakt-quote{font-family:"Playfair Display",serif;font-size:clamp(17px,2.2vw,24px);font-style:italic;color:rgba(255,255,255,.65);line-height:1.6;margin-bottom:14px;}
+.kontakt-author{font-size:10px;letter-spacing:4px;color:var(--orange2);margin-bottom:44px;}
+.kontakt-info{display:flex;flex-direction:column;gap:24px;}
+.ki-row{display:flex;align-items:flex-start;gap:14px;}
+.ki-icon{width:36px;height:36px;border:1px solid rgba(196,120,42,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(196,120,42,.04);}
+.ki-icon svg{stroke:var(--orange2);}
+.ki-label{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;margin-bottom:3px;}
+.ki-value{font-size:13px;color:rgba(255,255,255,.6);}
+/* Form */
+.form-group{margin-bottom:18px;}
+.form-label{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.25);text-transform:uppercase;display:block;margin-bottom:7px;}
+.form-input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(196,120,42,.2);color:#fff;font-size:13px;padding:11px 0;outline:none;font-family:Inter,sans-serif;transition:border .3s;}
+.form-input:focus{border-bottom-color:var(--orange2);}
+.form-input option{background:#0B1E3A;}
+.form-textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(196,120,42,.15);color:#fff;font-size:13px;padding:12px;outline:none;font-family:Inter,sans-serif;resize:vertical;min-height:120px;transition:border .3s;}
+.form-textarea:focus{border-color:rgba(196,120,42,.4);}
+.form-submit{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;padding:14px 36px;cursor:pointer;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .3s;margin-top:6px;display:inline-block;}
+.form-submit:hover{filter:brightness(1.1);transform:translateY(-2px);}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer{background:#020a14;border-top:1px solid rgba(196,120,42,.1);padding:32px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{height:36px;mix-blend-mode:screen;opacity:.45;}
+.footer-mid{font-size:11px;color:rgba(255,255,255,.18);}
+.footer-right{font-size:11px;color:rgba(196,120,42,.4);letter-spacing:1px;}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — TABLET (max 1024px)
+═══════════════════════════════════════ */
+@media(max-width:1024px){
+  #nav{padding:0 24px;}
+  .nav-tabs{display:none;}
+  .nav-menu-btn{display:flex;}
+  .nav-cta{display:none;}
+  
+  .hero-portrait{width:55%;}
+  .hero-content{width:60%;padding:100px 24px 60px;}
+  
+  .section{padding:64px 24px;}
+  .section-grid-2{grid-template-columns:1fr;gap:40px;}
+  .section-grid-2.flip{direction:ltr;}
+  
+  .ueber-layout{grid-template-columns:1fr;grid-template-rows:400px auto;}
+  .ueber-photo img{min-height:400px;}
+  .ueber-text{padding:48px 24px;}
+  
+  .manifest-layout{grid-template-columns:1fr;gap:40px;}
+  .team-layout{grid-template-columns:1fr;gap:40px;}
+  .kontakt-grid{grid-template-columns:1fr;gap:48px;}
+  
+  .werte-grid{grid-template-columns:1fr 1fr;}
+  .zg-grid{grid-template-columns:1fr 1fr;}
+  
+  .tr-grid{grid-template-columns:1fr 1fr;}
+  .tr-scroll-hint{display:block;}
+  
+  footer{padding:24px;}
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — MOBILE (max 640px)
+═══════════════════════════════════════ */
+@media(max-width:640px){
+  #nav{padding:0 16px;height:60px;}
+  .nav-logo{height:38px;}
+
+  /* HERO mobile: stacked, portrait as background */
+  #hero{align-items:flex-end;min-height:100svh;}
+  .hero-portrait{width:100%;left:0;}
+  .hero-portrait-fade{background:linear-gradient(to bottom,var(--navy) 0%,rgba(5,14,26,.1) 20%,rgba(5,14,26,.1) 50%,var(--navy) 85%);}
+  .hero-content{width:100%;padding:80px 20px 40px;}
+  .hero-h1{font-size:clamp(34px,9vw,52px);}
+  .hero-sub{font-size:14px;}
+  .hero-btns{flex-direction:column;gap:10px;}
+  .btn-primary,.btn-outline{width:100%;text-align:center;justify-content:center;clip-path:none;padding:14px 24px;}
+  .hero-scroll{left:20px;}
+  
+  .stats-strip{grid-template-columns:1fr 1fr;}
+  .stat-item:nth-child(3){border-top:1px solid rgba(196,120,42,.08);}
+  
+  .section{padding:52px 16px;}
+  
+  .criteria-grid{grid-template-columns:1fr;}
+  .werte-grid{grid-template-columns:1fr;}
+  .zg-grid{grid-template-columns:1fr;}
+  .tr-grid{grid-template-columns:1fr;}
+  
+  .ueber-layout{grid-template-rows:300px auto;}
+  .ueber-text{padding:36px 16px;}
+  
+  footer{flex-direction:column;text-align:center;padding:24px 16px;gap:12px;}
+  
+  .section-grid-2{gap:32px;}
+  .kontakt-grid{gap:36px;}
+}
+
+/* ══ SCROLL PROGRESS BAR ══ */
+#progress-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--orange),var(--orange2),var(--orange3));z-index:9999;width:0%;transition:width .1s linear;pointer-events:none;}
+
+/* ══ LOADING SCREEN ══ */
+#loader{position:fixed;inset:0;background:var(--navy);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s ease,visibility .7s ease;}
+#loader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.loader-logo{height:64px;mix-blend-mode:screen;animation:lPulse 1.6s ease-in-out infinite;}
+@keyframes lPulse{0%,100%{opacity:.35;transform:scale(.95);}50%{opacity:1;transform:scale(1);}}
+.loader-bar{width:180px;height:1px;background:rgba(196,120,42,.15);margin-top:28px;overflow:hidden;border-radius:1px;}
+.loader-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orange2));animation:lFill 1.3s cubic-bezier(.4,0,.2,1) forwards;}
+@keyframes lFill{from{width:0%;}to{width:100%;}}
+.loader-text{font-size:9px;letter-spacing:5px;color:rgba(255,255,255,.2);text-transform:uppercase;margin-top:16px;}
+
+/* ══ CUSTOM CURSOR ══ */
+@media(hover:hover) and (pointer:fine){
+  *{cursor:none !important;}
+}
+#cur{position:fixed;width:7px;height:7px;background:var(--orange2);border-radius:50%;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);transition:transform .15s,background .25s,opacity .2s;top:0;left:0;opacity:0;}
+#cur-r{position:fixed;width:30px;height:30px;border:1px solid rgba(196,120,42,.45);border-radius:50%;pointer-events:none;z-index:9996;transform:translate(-50%,-50%);transition:width .35s,height .35s,border-color .3s,opacity .2s;top:0;left:0;opacity:0;}
+#cur.on{opacity:1;}#cur-r.on{opacity:1;}
+#cur.big{transform:translate(-50%,-50%) scale(.2);}
+#cur-r.big{width:48px;height:48px;border-color:rgba(196,120,42,.8);}
+
+/* ══ BACK TO TOP ══ */
+#btt{position:fixed;bottom:28px;right:28px;width:42px;height:42px;background:linear-gradient(135deg,var(--orange),var(--orange2));display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:500;opacity:0;transform:translateY(16px);transition:all .4s;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);}
+#btt.show{opacity:1;transform:none;}
+#btt:hover{filter:brightness(1.15);transform:translateY(-3px) !important;}
+#btt svg{stroke:#fff;}
+@media(max-width:640px){#btt{bottom:18px;right:14px;width:36px;height:36px;}}
+
+/* ══ PROCESS STEPS LINE ══ */
+.process-steps{position:relative;}
+.process-steps::before{content:"";position:absolute;left:26px;top:24px;bottom:24px;width:1px;background:linear-gradient(180deg,transparent 0%,rgba(196,120,42,.2) 20%,rgba(196,120,42,.35) 50%,rgba(196,120,42,.2) 80%,transparent 100%);pointer-events:none;}
+.process-step{position:relative;}
+
+/* ══ TR CARDS ENHANCED ══ */
+.tr-card::after{content:"";position:absolute;inset:0;border:1px solid rgba(196,120,42,0);transition:border-color .4s;pointer-events:none;}
+.tr-card:hover::after{border-color:rgba(196,120,42,.5);}
+.tr-rendite-badge{position:absolute;top:12px;right:12px;background:rgba(5,14,26,.88);border:1px solid rgba(196,120,42,.4);color:var(--orange2);font-size:10px;font-weight:700;letter-spacing:1px;padding:4px 10px;opacity:0;transform:translateY(-4px);transition:all .4s;}
+.tr-card:hover .tr-rendite-badge{opacity:1;transform:none;}
+
+/* ══ WERTE CARDS ENHANCED ══ */
+.wert-icon{transition:background .3s,border-color .3s,transform .35s;}
+.wert-card:hover .wert-icon{background:linear-gradient(135deg,var(--orange),var(--orange2));border-color:transparent;transform:rotate(6deg) scale(1.08);}
+.wert-card:hover .wert-icon svg{stroke:#fff;}
+.wert-card:hover .wert-title{color:var(--orange2);}
+.wert-card:hover .wert-title{background:linear-gradient(135deg,var(--orange),var(--orange3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+/* ══ ZG CARDS ══ */
+.zg-card::before{content:"";position:absolute;top:-80px;right:-80px;width:180px;height:180px;background:radial-gradient(circle,rgba(196,120,42,.08) 0%,transparent 70%);opacity:0;transition:opacity .5s;pointer-events:none;}
+.zg-card:hover::before{opacity:1;}
+
+/* ══ CRIT ITEM ══ */
+.crit-item{transition:background .3s,transform .25s,opacity .6s,margin .2s;}
+.crit-item:hover{transform:translateX(5px);background:rgba(196,120,42,.08);}
+
+/* ══ QUOTE IN-VIEW ══ */
+.qsec-quote,.qsec-author,.bb-label,.bb-number,.bb-sub{opacity:0;transform:translateY(22px);transition:opacity .85s ease,transform .85s ease;}
+.qsec-quote.in,.qsec-author.in,.bb-label.in,.bb-number.in,.bb-sub.in{opacity:1;transform:none;}
+.qsec-author{transition-delay:.4s !important;}
+.bb-number{transition-delay:.1s !important;}
+.bb-sub{transition-delay:.25s !important;}
+
+/* ══ NAV ══ */
+#nav{background:linear-gradient(180deg,rgba(5,14,26,.65) 0%,transparent 100%);}
+#nav.scrolled{background:rgba(5,14,26,.97) !important;}
+
+/* ══ SECTION DIVIDER ══ */
+.sec-divider{height:1px;background:linear-gradient(90deg,transparent 0%,rgba(196,120,42,.18) 50%,transparent 100%);margin:0 48px;}
+@media(max-width:640px){.sec-divider{margin:0 16px;}}
+
+/* ══ STATS HOVER ══ */
+.stat-item{transition:background .4s;}
+.stat-item:hover{background:rgba(196,120,42,.14);}
+
+/* ══ TIMELINE HOVER ══ */
+.tl-item{transition:background .3s,padding .25s;}
+.tl-item:hover{background:rgba(196,120,42,.05);padding-left:8px;border-radius:4px;}
+.tl-item:hover .tl-year{color:var(--orange3);}
+.tl-year{transition:color .3s;}
+
+/* ══ MOBILE MENU ANIMATED ══ */
+.nav-mobile{transition:opacity .4s,visibility .4s;opacity:0;visibility:hidden;display:flex !important;}
+.nav-mobile.open{opacity:1;visibility:visible;}
+.nav-mobile-tab{opacity:0;transform:translateX(24px);transition:opacity .4s,transform .4s,color .3s;}
+.nav-mobile.open .nav-mobile-tab:nth-child(1){opacity:1;transform:none;transition-delay:.08s;}
+.nav-mobile.open .nav-mobile-tab:nth-child(2){opacity:1;transform:none;transition-delay:.15s;}
+.nav-mobile.open .nav-mobile-tab:nth-child(3){opacity:1;transform:none;transition-delay:.22s;}
+.nav-mobile.open .nav-mobile-tab:nth-child(4){opacity:1;transform:none;transition-delay:.29s;}
+.nav-mobile.open .nav-mobile-tab:nth-child(5){opacity:1;transform:none;transition-delay:.36s;}
+.nav-mobile.open .nav-mobile-tab:nth-child(6){opacity:1;transform:none;transition-delay:.43s;}
+.nav-mobile.open .nav-mobile-tab:nth-child(7){opacity:1;transform:none;transition-delay:.50s;}
+.nav-mobile-cta{opacity:0;transform:translateY(10px);transition:opacity .4s .6s,transform .4s .6s;}
+.nav-mobile.open .nav-mobile-cta{opacity:1;transform:none;}
+
+/* ══ ARBEITSWEISE IMG ══ */
+.arbeitsweise-img{overflow:hidden;}
+.arbeitsweise-img img{transition:transform .6s ease;}
+.arbeitsweise-img:hover img{transform:scale(1.04);}
+
+/* ══ FOOTER SOCIAL ══ */
+.footer-social{display:flex;gap:10px;align-items:center;}
+.fsl{width:30px;height:30px;border:1px solid rgba(196,120,42,.18);display:flex;align-items:center;justify-content:center;transition:all .3s;cursor:pointer;flex-shrink:0;}
+.fsl:hover{background:linear-gradient(135deg,var(--orange),var(--orange2));border-color:transparent;}
+.fsl:hover svg{stroke:#000;}
+.fsl svg{stroke:rgba(255,255,255,.35);transition:stroke .3s;}
+
+/* ══ IMPRESSUM ══ */
+.imprint-bar{background:#020a14;border-top:1px solid rgba(255,255,255,.04);padding:14px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.imprint-link{font-size:11px;color:rgba(255,255,255,.18);cursor:pointer;transition:color .2s;letter-spacing:.5px;}
+.imprint-link:hover{color:rgba(196,120,42,.55);}
+@media(max-width:640px){.imprint-bar{padding:12px 16px;}.footer{padding:24px 16px;flex-direction:column;text-align:center;gap:16px;}}
+
+/* ══ FORM UX ══ */
+.form-input:focus,.form-textarea:focus{outline:none;}
+.form-group{position:relative;}
+.form-success{background:linear-gradient(135deg,#1a5c3a,#2a7a50) !important;clip-path:none !important;padding:14px 28px !important;}
+
+</style>
+</head>
+<body>
+<!-- LOADER -->
+<div id="loader">
+  <img class="loader-logo" src="images/logo.png" alt="Sam Plett">
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="loader-text">Immobilien entwickeln &nbsp;·&nbsp; Werte schaffen</div>
+</div>
+<div id="cur"></div>
+<div id="cur-r"></div>
+<div id="progress-bar"></div>
+<div id="btt"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg></div>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav id="nav">
+  <img class="nav-logo" src="images/logo.png" alt="Sam Plett">
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="goTo('hero')">Start</div>
+    <div class="nav-tab" onclick="goTo('arbeitsweise')">Arbeitsweise</div>
+    <div class="nav-tab" onclick="goTo('suchprofil')">Suchprofil</div>
+    <div class="nav-tab" onclick="goTo('trackrecord')">Track Record</div>
+    <div class="nav-tab" onclick="goTo('ueber')">Über mich</div>
+    <div class="nav-tab" onclick="goTo('werte')">Werte</div>
+    <div class="nav-tab" onclick="goTo('kontakt')">Kontakt</div>
+  </div>
+  <div class="nav-cta" onclick="goTo('kontakt')">Gespräch anfragen</div>
+  <div class="nav-menu-btn" onclick="toggleMenu()" id="menuBtn">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <div class="nav-mobile-tab" onclick="goTo('hero');closeMenu()">Start</div>
+  <div class="nav-mobile-tab" onclick="goTo('arbeitsweise');closeMenu()">Arbeitsweise</div>
+  <div class="nav-mobile-tab" onclick="goTo('suchprofil');closeMenu()">Suchprofil</div>
+  <div class="nav-mobile-tab" onclick="goTo('trackrecord');closeMenu()">Track Record</div>
+  <div class="nav-mobile-tab" onclick="goTo('ueber');closeMenu()">Über mich</div>
+  <div class="nav-mobile-tab" onclick="goTo('werte');closeMenu()">Werte</div>
+  <div class="nav-mobile-tab" onclick="goTo('kontakt');closeMenu()">Kontakt</div>
+  <div class="nav-mobile-cta" onclick="goTo('kontakt');closeMenu()">Gespräch anfragen</div>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=2000&q=80');" data-px="0.3"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-portrait">
+    <img src="images/sam-hero.jpg" alt="Sam Plett">
+    <div class="hero-portrait-fade"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-line"></div>
+      <div class="hero-badge-text">samplett.de &nbsp;·&nbsp; Immobilienentwicklung</div>
+    </div>
+    <h1 class="hero-h1 line1">Immobilien entwickeln,</h1>
+    <h1 class="hero-h1 line2"><em>Werte schaffen.</em></h1>
+    <p class="hero-sub">Sam Plett entwickelt und steuert Beteiligungen in den Bereichen Finanzdienstleistung und Immobilienvermittlung — mit transparenten Strukturen, effizienten Prozessen und einem Netzwerk von über 1.500 Partnern deutschlandweit.</p>
+    <div class="hero-btns">
+      <div class="btn-primary" onclick="goTo('trackrecord')">Track Record ansehen</div>
+      <div class="btn-outline" onclick="goTo('kontakt')">Gespräch anfragen</div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <div class="hero-scroll-text">Scroll</div>
+  </div>
+</section>
+
+<!-- ═══════════ STATS ═══════════ -->
+<div class="stats-strip">
+  <div class="stat-item"><div class="stat-num">+2,5<span class="stat-unit">Mrd.</span></div><div class="stat-label">Beitragssumme</div></div>
+  <div class="stat-item"><div class="stat-num">1.500<span class="stat-unit">+</span></div><div class="stat-label">Partner</div></div>
+  <div class="stat-item"><div class="stat-num">+15<span class="stat-unit">Mio.</span></div><div class="stat-label">Gewinn Holding</div></div>
+  <div class="stat-item"><div class="stat-num">2<span class="stat-unit">×</span></div><div class="stat-label">Firmenverkäufe</div></div>
+</div>
+
+<!-- ═══════════ ARBEITSWEISE ═══════════ -->
+<section id="arbeitsweise" class="section">
+  <div class="section-inner">
+    <div class="section-grid-2">
+      <div>
+        <div class="eyebrow reveal"><div class="eyebrow-line"></div><div class="eyebrow-text">Geschäftsmodell & Arbeitsweise</div></div>
+        <h2 class="section-title reveal">Von der Beratung zur <em>erfolgreichen Investition</em></h2>
+        <p class="section-body reveal">Ich entwickle und steuere Beteiligungen in den Bereichen Finanzdienstleistung und Immobilienvermittlung. Über meine Unternehmen werden Immobilienprojekte deutschlandweit akquiriert, geprüft, entwickelt und vermarktet.</p>
+        <div class="process-steps">
+          <div class="process-step reveal" style="transition-delay:.0s">
+            <div class="ps-num">01</div>
+            <div class="ps-body"><div class="ps-title">Leadgenerierung</div><div class="ps-desc">Gezielte Online-Kampagnen auf Google, Facebook und Instagram gewinnen Interessenten für Finanz- und Immobilienangebote — über 130.000 qualifizierte Leads generiert.</div></div>
+          </div>
+          <div class="process-step reveal" style="transition-delay:.08s">
+            <div class="ps-num">02</div>
+            <div class="ps-body"><div class="ps-title">Finanzanalyse</div><div class="ps-desc">Ein Finanzexperte prüft Vermögen, Vorsorge, Versicherungen und die gesamte Kundensituation systematisch und transparent.</div></div>
+          </div>
+          <div class="process-step reveal" style="transition-delay:.16s">
+            <div class="ps-num">03</div>
+            <div class="ps-body"><div class="ps-title">Investmentqualifizierung</div><div class="ps-desc">Im Gespräch klären wir, ob Immobilieninvestments zum Kundenprofil passen — individuell und ohne Standardlösungen.</div></div>
+          </div>
+          <div class="process-step reveal" style="transition-delay:.24s">
+            <div class="ps-num">04</div>
+            <div class="ps-body"><div class="ps-title">Überleitung zu Brimo</div><div class="ps-desc">Interessierte Kunden werden digital, schnell und sicher an Brimo übergeben — nahtlos und ohne Medienbruch.</div></div>
+          </div>
+          <div class="process-step reveal" style="transition-delay:.32s">
+            <div class="ps-num">05</div>
+            <div class="ps-body"><div class="ps-title">Abwicklung & Abschluss</div><div class="ps-desc">Brimo organisiert Finanzierung, Objektwahl und Notartermin — vollständig begleitet bis zum erfolgreichen Abschluss.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="arbeitsweise-img reveal-right">
+        <img src="images/sam-outdoor.jpg" alt="Sam Plett — Immobilienentwickler">
+        <div class="arbeitsweise-img-label">
+          <div class="ail-name">Sam Plett</div>
+          <div class="ail-role">Founder & CEO</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sec-divider"></div>
+
+<!-- ═══════════ QUOTE 1 ═══════════ -->
+<div class="quote-section">
+  <div class="qsec-bg" data-px="0.4" style="background-image:url('images/sam-glass.jpg');filter:brightness(.3) saturate(.5) contrast(1.1);"></div>
+  <div class="qsec-overlay" style="background:rgba(5,14,26,.75);"></div>
+  <div class="qsec-content">
+    <div class="qsec-quote reveal">"Erfolg zeigt sich nicht im schnellen Abschluss, sondern in <em>stabilen Ergebnissen über Jahre.</em>"</div>
+    <div class="qsec-author reveal">Sam Plett · Founder & CEO</div>
+  </div>
+</div>
+
+<!-- ═══════════ SUCHPROFIL ═══════════ -->
+<section id="suchprofil" class="section">
+  <div class="section-inner">
+    <div class="section-grid-2 flip">
+      <div>
+        <div class="eyebrow reveal"><div class="eyebrow-line"></div><div class="eyebrow-text">Ankaufsstrategie</div></div>
+        <h2 class="section-title reveal">Was ich <em>suche</em></h2>
+        <p class="section-body reveal">Ich suche gezielt Immobilien mit Entwicklungspotenzial nach klaren, bewährten Kriterien. Gemeinsam mit über 1.500 Finanzdienstleistern identifiziere ich passende Objekte, sichere die Finanzierung und begleite Projekte bis zum erfolgreichen Abschluss.</p>
+        <div class="criteria-grid reveal">
+          <div class="crit-item"><div class="crit-dot"></div><div><div class="crit-label">Objekttyp</div><div class="crit-value">Mehrfamilienhäuser & Wohnanlagen</div></div></div>
+          <div class="crit-item"><div class="crit-dot"></div><div><div class="crit-label">Einheiten</div><div class="crit-value">Ab 10 Wohneinheiten</div></div></div>
+          <div class="crit-item"><div class="crit-dot"></div><div><div class="crit-label">Lage</div><div class="crit-value">Gute bis aufstrebende Lagen in DE</div></div></div>
+          <div class="crit-item"><div class="crit-dot"></div><div><div class="crit-label">Zustand</div><div class="crit-value">Sanierungsbedürftig oder Bestand</div></div></div>
+          <div class="crit-item"><div class="crit-dot"></div><div><div class="crit-label">Teilbarkeit</div><div class="crit-value">WEG-teilbar bevorzugt</div></div></div>
+          <div class="crit-item"><div class="crit-dot"></div><div><div class="crit-label">Größe</div><div class="crit-value">Bevorzugt unter 50 Einheiten</div></div></div>
+          <div class="crit-item"><div class="crit-dot"></div><div><div class="crit-label">Gewerbeanteil</div><div class="crit-value">Nur untergeordnet akzeptabel</div></div></div>
+          <div class="crit-item"><div class="crit-dot"></div><div><div class="crit-label">ESG-Standards</div><div class="crit-value">Nachhaltige Bauweise bevorzugt</div></div></div>
+        </div>
+        <div class="suchprofil-cta reveal">
+          <div class="suchprofil-cta-title">Objekt anbieten?</div>
+          <div class="suchprofil-cta-text">Sie haben ein passendes Objekt? Ich freue mich auf Ihre Kontaktaufnahme — direkt und unkompliziert.</div>
+          <div class="btn-primary" onclick="goTo('kontakt')">Jetzt melden →</div>
+        </div>
+      </div>
+      <div class="suchprofil-img reveal-left">
+        <img src="images/interior.jpg" alt="Modernisiertes Apartment">
+        <div class="suchprofil-img-overlay"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sec-divider"></div>
+
+<!-- ═══════════ BIG NUMBER ═══════════ -->
+<div class="big-banner">
+  <div class="bb-bg" data-px="0.4" style="background-image:url('images/sam-desk.jpg');filter:brightness(.25) saturate(.4) contrast(1.1);"></div>
+  <div class="bb-overlay" style="background:rgba(11,30,58,.82);"></div>
+  <div class="bb-content">
+    <div class="bb-label reveal">Monatlich erfolgreich vermittelt</div>
+    <div class="bb-number reveal">100+</div>
+    <div class="bb-sub reveal">Investments · strukturiert · skalierbar</div>
+  </div>
+</div>
+
+<!-- ═══════════ TRACK RECORD ═══════════ -->
+<section id="trackrecord" class="section">
+  <div class="section-inner tr-intro">
+    <div class="eyebrow reveal"><div class="eyebrow-line"></div><div class="eyebrow-text">Projekte & Erfolge</div></div>
+    <h2 class="section-title reveal">Track <em>Record</em></h2>
+    <p class="section-body reveal" style="max-width:600px;">Jedes Projekt folgt einem klaren Ablauf: Akquise · Prüfung · Strukturierung · Vertrieb. Effizient, transparent und skalierbar — mit über 1.500 Partnern.</p>
+  </div>
+  <div class="tr-grid">
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-schwarzheide.jpg" alt="Schwarzheide">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite 4,0 %</div><div class="tr-card-city">Schwarzheide</div>
+        <div class="tr-card-name">Am Wasserturm · 157 Einheiten</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis</div><div class="tr-meta-value">~175.000 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">4,0 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">7.000 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">2.500 €</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-augsburg.jpg" alt="Augsburg">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite 4,0 %</div><div class="tr-card-city">Augsburg</div>
+        <div class="tr-card-name">Zugspitzstraße · 138 Serviced Apartments</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis</div><div class="tr-meta-value">195.000 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">4,0 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">~7.800 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">7.222 €</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-koeln.jpg" alt="Köln-Porz">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite 3,57–4,5 %</div><div class="tr-card-city">Köln-Porz</div>
+        <div class="tr-card-name">Himbeerweg · 3 MFH, 24 Einheiten</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis Ø</div><div class="tr-meta-value">260.224 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">3,57–4,50 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">~10.510 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">3.800 €</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-ruelzheim.jpg" alt="Rülzheim">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite 3,8 %</div><div class="tr-card-city">Rülzheim</div>
+        <div class="tr-card-name">Helmut-Braun-Ring · 24 Einheiten</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis</div><div class="tr-meta-value">~162.500 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">3,8 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">~9.167 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">~3.325 €</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-ludwigshafen.jpg" alt="Ludwigshafen">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite ~3,45 %</div><div class="tr-card-city">Ludwigshafen</div>
+        <div class="tr-card-name">Weinbietstraße · 40 Einheiten</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis Ø</div><div class="tr-meta-value">280.000 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">~3,45 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">~9.696 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">~3.650 €</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-mannheim.jpg" alt="Mannheim">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite 4,33 %</div><div class="tr-card-city">Mannheim</div>
+        <div class="tr-card-name">Pfeilstraße · 15 Einheiten</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis</div><div class="tr-meta-value">240.100 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">4,33 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">9.600 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">2.743 €</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-ruesselsheim.jpg" alt="Rüsselsheim">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite 4,33 %</div><div class="tr-card-city">Rüsselsheim</div>
+        <div class="tr-card-name">Adam-Opelstraße · 10 Einheiten</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis</div><div class="tr-meta-value">229.500 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">4,33 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">10.800 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">3.063 €</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-offenbach.jpg" alt="Offenbach">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite 3,59 %</div><div class="tr-card-city">Offenbach</div>
+        <div class="tr-card-name">Ludwigstraße · 12 Einheiten</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis Ø</div><div class="tr-meta-value">217.758 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">3,59 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">7.833 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">4.533 €</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-muenchen.jpg" alt="München-Pasing">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite 5,09 %</div><div class="tr-card-city">München-Pasing</div>
+        <div class="tr-card-name">Nimmerfallstraße · 56 Wohnungen</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis</div><div class="tr-meta-value">513.500 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">5,09 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">26.280 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">~10.600 €</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-leipzig.jpg" alt="Leipzig">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite 4,0 %</div><div class="tr-card-city">Leipzig</div>
+        <div class="tr-card-name">Lausen-Grünau · 58 Einheiten</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis Ø</div><div class="tr-meta-value">104.250 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">4,0 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">~4.170 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">~2.030 €</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-duisburg.jpg" alt="Duisburg">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite 3,54 %</div><div class="tr-card-city">Duisburg</div>
+        <div class="tr-card-name">Katharina-Mercator-Gasse · 23 Neubau</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis Ø</div><div class="tr-meta-value">315.000 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">3,54 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">~11.150 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">5.250 €</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tr-card">
+      <img class="tr-card-img" src="images/tr-leipzig_plagwitz.jpg" alt="Leipzig Plagwitz">
+      <div class="tr-card-info">
+        <div class="tr-rendite-badge">Rendite ~4,19 %</div><div class="tr-card-city">Leipzig-Plagwitz</div>
+        <div class="tr-card-name">Erich-Zeigner-Allee · 7 Einheiten</div>
+        <div class="tr-card-meta">
+          <div class="tr-meta-item"><div class="tr-meta-label">Kaufpreis</div><div class="tr-meta-value">209.380 €</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">Rendite</div><div class="tr-meta-value">~4,19 %</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">JNK-Miete</div><div class="tr-meta-value">~9,98 €/m²</div></div>
+          <div class="tr-meta-item"><div class="tr-meta-label">€/m²</div><div class="tr-meta-value">~3.520 €</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<!-- TR CTA -->
+<div style="background:rgba(196,120,42,.07);border-top:1px solid rgba(196,120,42,.15);padding:40px 48px;text-align:center;">
+  <div style="font-size:10px;letter-spacing:4px;color:var(--orange2);text-transform:uppercase;margin-bottom:12px;">Nächstes Projekt</div>
+  <div class="playfair" style="font-size:clamp(22px,3vw,36px);font-weight:300;color:#fff;margin-bottom:20px;">Werden Sie Teil des Track Records</div>
+  <div style="font-size:14px;color:rgba(255,255,255,.5);max-width:520px;margin:0 auto 28px;">Monatlich werden über 100 Investments erfolgreich vermittelt. Sprechen Sie mit uns über Ihr nächstes Projekt.</div>
+  <div class="btn-primary" style="display:inline-block;" onclick="document.getElementById('kontakt').scrollIntoView({behavior:'smooth'})">Jetzt Kontakt aufnehmen</div>
+</div>
+
+<div class="tr-scroll-hint">← Scrollen für mehr Projekte →</div>
+</section>
+<div class="sec-divider"></div>
+
+<!-- ═══════════ ÜBER MICH / LEITBILD ═══════════ -->
+<section id="ueber">
+  <div class="ueber-layout">
+    <div class="ueber-photo">
+      <img src="images/sam-desk.jpg" alt="Sam Plett">
+      <div class="ueber-photo-overlay"></div>
+      <div class="ueber-photo-label">
+        <div class="upl-name">Sam Plett</div>
+        <div class="upl-title">Founder & CEO</div>
+      </div>
+    </div>
+    <div class="ueber-text">
+      <div class="eyebrow reveal"><div class="eyebrow-line"></div><div class="eyebrow-text">Leitbild · Über mich</div></div>
+      <h2 class="section-title reveal">Vom Marinesoldaten <em>zum Unternehmer</em></h2>
+      <p class="section-body reveal">Sam Plett hat nie den einfachsten Weg gewählt. Schon früh wusste er: Wer Ziele erreichen will, braucht Disziplin, Ausdauer und den Mut, Verantwortung zu übernehmen. Was als Unteroffizier in der Marine gelernt wurde, prägt bis heute jede unternehmerische Entscheidung: Haltung, Struktur und Verlässlichkeit.</p>
+      <div class="timeline">
+        <div class="tl-item reveal" style="transition-delay:.0s">
+          <div class="tl-year">2013</div><div class="tl-bar"></div>
+          <div class="tl-body"><div class="tl-title">Bundeswehr · Unteroffizier Marine</div><div class="tl-desc">Klares Denken und schnelles Handeln in schwierigen Situationen. Diese Werte prägen bis heute.</div></div>
+        </div>
+        <div class="tl-item reveal" style="transition-delay:.08s">
+          <div class="tl-year">2015</div><div class="tl-bar"></div>
+          <div class="tl-body"><div class="tl-title">Erste Immobilie & Start der Selbstständigkeit</div><div class="tl-desc">Ergebnis von Vorbereitung, Disziplin und klarem Fokus — der Start in den Aufbau mehrerer Unternehmen.</div></div>
+        </div>
+        <div class="tl-item reveal" style="transition-delay:.16s">
+          <div class="tl-year">2020</div><div class="tl-bar"></div>
+          <div class="tl-body"><div class="tl-title">Gründung FinanzSoldat GmbH</div><div class="tl-desc">Spezialisierte Plattform für Finanzberatung mit schnell wachsendem Partnernetzwerk.</div></div>
+        </div>
+        <div class="tl-item reveal" style="transition-delay:.24s">
+          <div class="tl-year">2023</div><div class="tl-bar"></div>
+          <div class="tl-body"><div class="tl-title">Exit FinanzSoldat GmbH · 8-stellig</div><div class="tl-desc">Erster erfolgreicher Firmenverkauf — Beweis dass Strukturen auch ohne ihn Bestand haben.</div></div>
+        </div>
+        <div class="tl-item reveal" style="transition-delay:.32s">
+          <div class="tl-year">2024</div><div class="tl-bar"></div>
+          <div class="tl-body"><div class="tl-title">Exit FinanzStarter GmbH · 8-stellig</div><div class="tl-desc">Zweiter erfolgreicher Exit. Fokus nun vollständig auf Immobilienentwicklung und Beteiligungen.</div></div>
+        </div>
+        <div class="tl-item reveal" style="transition-delay:.40s">
+          <div class="tl-year">Heute</div><div class="tl-bar"></div>
+          <div class="tl-body"><div class="tl-title">Sam Plett Beteiligung GmbH</div><div class="tl-desc">Über 1.500 Partner, 50 Mitarbeiter, deutschlandweite Immobilienprojekte und +15 Mio. € Gewinn in der Holding.</div></div>
+        </div>
+      </div>
+      <div class="quote-bar reveal">
+        <p>"Wachstum bedeutet für mich nicht nur Zahlen, sondern auch persönliche Weiterentwicklung — bei mir selbst und meinen Partnern."</p>
+        <cite>— Sam Plett, Founder & CEO</cite>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sec-divider"></div>
+
+<!-- ═══════════ WERTE ═══════════ -->
+<section id="werte" class="section">
+  <div class="section-inner">
+    <div class="eyebrow reveal"><div class="eyebrow-line"></div><div class="eyebrow-text">Vision · Mission · Werte</div></div>
+    <h2 class="section-title reveal">Klarer Kompass für <em>Arbeit und Leben</em></h2>
+    <p class="section-body reveal" style="max-width:640px;">Für mich zählt, was Bestand hat: Vertrauen, klare Ergebnisse und verlässliche Partnerschaften. Mit Disziplin und Verantwortung gehe ich jeden Schritt bewusst — im Geschäft wie im Leben.</p>
+    <div class="werte-grid">
+      <div class="wert-card reveal" style="transition-delay:.00s">
+        <div class="wert-bg-num">1</div>
+        <div class="wert-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg></div>
+        <div class="wert-title">Vertrauen</div>
+        <div class="wert-desc">Die Grundlage jeder Zusammenarbeit. Ich stehe zu meinen Entscheidungen und Zusagen — ohne Vertrauen gibt es keine tragfähigen Partnerschaften.</div>
+      </div>
+      <div class="wert-card reveal" style="transition-delay:.08s">
+        <div class="wert-bg-num">2</div>
+        <div class="wert-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></div>
+        <div class="wert-title">Disziplin</div>
+        <div class="wert-desc">Aus meiner Zeit als Marinesoldat. Disziplin bringt Projekte ans Ziel — Erfolg bedeutet, auch in anspruchsvollen Phasen konsequent zu bleiben.</div>
+      </div>
+      <div class="wert-card reveal" style="transition-delay:.16s">
+        <div class="wert-bg-num">3</div>
+        <div class="wert-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+        <div class="wert-title">Transparenz</div>
+        <div class="wert-desc">Offene Kommunikation schafft Sicherheit. Ich teile Fakten klar und nachvollziehbar — auch wenn sie unbequem sind.</div>
+      </div>
+      <div class="wert-card reveal" style="transition-delay:.24s">
+        <div class="wert-bg-num">4</div>
+        <div class="wert-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg></div>
+        <div class="wert-title">Partnerschaft</div>
+        <div class="wert-desc">Langfristige Beziehungen sind wertvoller als kurzfristige Abschlüsse. Ich arbeite mit Partnern, die dieselben Werte teilen.</div>
+      </div>
+      <div class="wert-card reveal" style="transition-delay:.32s">
+        <div class="wert-bg-num">5</div>
+        <div class="wert-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+        <div class="wert-title">Verantwortung</div>
+        <div class="wert-desc">Ich stehe hinter meinen Projekten und Partnern — in guten wie in herausfordernden Zeiten. Stabilität auch unter Druck.</div>
+      </div>
+      <div class="wert-card reveal" style="transition-delay:.40s">
+        <div class="wert-bg-num">6</div>
+        <div class="wert-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></div>
+        <div class="wert-title">Effizienz</div>
+        <div class="wert-desc">Jedes Projekt wird so strukturiert, dass Zeit und Kapital optimal eingesetzt werden. Klare Prozesse sichern planbare Ergebnisse.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sec-divider"></div>
+
+
+<!-- WERTE CTA -->
+<div style="background:var(--navy2);padding:64px 48px;text-align:center;" class="reveal">
+  <div style="max-width:700px;margin:0 auto;">
+    <div style="font-size:10px;letter-spacing:4px;color:var(--orange2);text-transform:uppercase;margin-bottom:16px;">Bereit für den nächsten Schritt?</div>
+    <div class="playfair" style="font-size:clamp(26px,3.5vw,44px);font-weight:300;color:#fff;margin-bottom:16px;">Alle, die dieselben Werte teilen, sind eingeladen, Teil dieses Weges zu werden.</div>
+    <div style="font-size:14px;color:rgba(255,255,255,.5);margin-bottom:32px;">— Sam Plett</div>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <div class="btn-primary" onclick="document.getElementById('kontakt').scrollIntoView({behavior:'smooth'})">Gespräch anfragen</div>
+      <div class="btn-outline" onclick="document.getElementById('zielgruppen').scrollIntoView({behavior:'smooth'})">Mehr über Zielgruppen</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ZIELGRUPPEN ═══════════ -->
+<section id="zielgruppen" class="section">
+  <div class="section-inner">
+    <div class="eyebrow reveal"><div class="eyebrow-line"></div><div class="eyebrow-text">Zielgruppen</div></div>
+    <h2 class="section-title reveal">Mit starken Partnern <em>Werte schaffen</em></h2>
+    <div class="zg-grid">
+      <div class="zg-card reveal">
+        <div class="zg-icon"><svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg></div>
+        <div class="zg-tag">Privatinvestoren</div>
+        <div class="zg-title">Vermögen strategisch aufbauen</div>
+        <div class="zg-desc">Für Einsteiger, die ihr Vermögen langfristig und strategisch aufbauen möchten. Typisches Investmentvolumen unter 1 Mio. €. Wir bieten ein Rundum-Sorglos-Paket — von der Objektprüfung über Finanzierung bis zur Nachbetreuung.</div>
+      </div>
+      <div class="zg-card reveal" style="transition-delay:.1s">
+        <div class="zg-icon"><svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"/></svg></div>
+        <div class="zg-tag">Family Offices</div>
+        <div class="zg-title">Institutionelle Anleger</div>
+        <div class="zg-desc">Für institutionelle Anleger im höheren Volumensegment. Sicherheit, Verlässlichkeit und Geschwindigkeit stehen im Vordergrund. Durch unser Kundennetzwerk stehen passende Käuferprofile bereits zur Verfügung.</div>
+      </div>
+      <div class="zg-card reveal" style="transition-delay:.2s">
+        <div class="zg-icon"><svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg></div>
+        <div class="zg-tag">Partnernetzwerk</div>
+        <div class="zg-title">Makler, Unternehmer & Partner</div>
+        <div class="zg-desc">Wir stellen erprobte Strukturen, funktionierende Prozesse und exklusiven Marktzugang bereit. Partnerschaft auf Augenhöhe — mit dem Ziel, aus Ideen nachhaltige Ergebnisse zu machen.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sec-divider"></div>
+
+<!-- ═══════════ VERTRAUEN / MANIFEST ═══════════ -->
+<section id="vertrauen" class="section">
+  <div class="section-inner">
+    <div class="manifest-layout">
+      <div class="manifest-photo reveal-left">
+        <img src="images/sam-speaking.jpg" alt="Sam Plett">
+      </div>
+      <div>
+        <div class="eyebrow reveal"><div class="eyebrow-line"></div><div class="eyebrow-text">Das Manifest</div></div>
+        <h2 class="section-title reveal">Bekenntnis zu <em>Haltung und Handeln</em></h2>
+        <p class="section-body reveal">Erfolg ist kein Zufall. Er entsteht durch klare Entscheidungen, Verantwortung und den Fokus auf das Wesentliche. Ich baue Unternehmen, die nachhaltigen Wert schaffen — nicht für den schnellen Gewinn, sondern für den langfristigen Erfolg.</p>
+        <div class="three-pillars reveal">
+          <div class="pillar">
+            <div class="pillar-title">Klarheit</div>
+            <div class="pillar-desc">Jeder weiß zu jedem Zeitpunkt, woran er ist — mit offenen Fakten, klaren Strukturen und ohne versteckte Bedingungen.</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-title">Verlässlichkeit</div>
+            <div class="pillar-desc">Zusagen gelten, auch wenn sich Rahmenbedingungen ändern. Das ist nicht selbstverständlich — aber es ist mein Anspruch.</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-title">Verantwortung</div>
+            <div class="pillar-desc">Die Konsequenzen meiner Entscheidungen zu tragen — unternehmerisch wie persönlich, in guten wie in schwierigen Zeiten.</div>
+          </div>
+        </div>
+        <div class="quote-bar reveal">
+          <p>"Vertrauen und Werte sind für mich kein Zusatz, sondern der Kern unseres Erfolgs. Alles andere baut darauf auf."</p>
+          <cite>— Sam Plett, Founder & CEO</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sec-divider"></div>
+
+<!-- ═══════════ TEAM & NETZWERK ═══════════ -->
+<section id="team" class="section" style="background:var(--navy2);">
+  <div class="section-inner">
+    <div class="team-layout">
+      <div>
+        <div class="eyebrow reveal"><div class="eyebrow-line"></div><div class="eyebrow-text">Unser Team</div></div>
+        <h2 class="section-title reveal">Das Netzwerk hinter der <em>Marke Sam Plett</em></h2>
+        <p class="section-body reveal">Ein starkes Netzwerk ist der Multiplikator jedes Projekterfolgs. Unser Netzwerk ist Leistungsplattform und Vertriebsmaschine zugleich — der Kern, auf dem wir unsere Projekte aufbauen.</p>
+        <p class="section-body reveal" style="margin-top:16px;">Mit mehr als 1.500 erfahrenen Partnern sichern wir Geschwindigkeit, Stabilität und hohe Erfolgsquoten. Ob freie Unternehmen oder direkt geführte Vermittler — wir setzen auf Partner, die langfristig mit uns arbeiten und dasselbe Qualitätsverständnis teilen.</p>
+        <div class="team-stats reveal">
+          <div class="ts-item"><div class="ts-num">1.500<span class="ts-unit">+</span></div><div class="ts-label">Vertriebspartner</div></div>
+          <div class="ts-item"><div class="ts-num">50<span class="ts-unit"></span></div><div class="ts-label">Mitarbeiter</div></div>
+          <div class="ts-item"><div class="ts-num">500k<span class="ts-unit">+</span></div><div class="ts-label">Social Media</div></div>
+          <div class="ts-item"><div class="ts-num">10+<span class="ts-unit">Mio.</span></div><div class="ts-label">Ad-Budget</div></div>
+        </div>
+      </div>
+      <div class="team-photo reveal-right">
+        <img src="images/sam-side.jpg" alt="Sam Plett — Team & Netzwerk">
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sec-divider"></div>
+
+<!-- ═══════════ QUOTE 2 ═══════════ -->
+<div class="quote-section" style="height:45vh;">
+  <div class="qsec-bg" data-px="0.4" style="background-image:url('images/sam-daughter.jpg');filter:brightness(.25) saturate(.4) contrast(1.1);"></div>
+  <div class="qsec-overlay" style="background:rgba(5,14,26,.8);"></div>
+  <div class="qsec-content">
+    <div class="qsec-quote reveal">"Für mich zählt, was Bestand hat — Vertrauen, klare Ergebnisse und verlässliche Partnerschaften."</div>
+    <div class="qsec-author reveal">Sam Plett · Founder & CEO</div>
+  </div>
+</div>
+
+<!-- ═══════════ KONTAKT ═══════════ -->
+<section id="kontakt" class="section">
+  <div class="section-inner">
+    <div class="eyebrow reveal"><div class="eyebrow-line"></div><div class="eyebrow-text">Gemeinsam wachsen</div></div>
+    <h2 class="section-title reveal">Lassen Sie uns <em>sprechen.</em></h2>
+    <div class="kontakt-grid">
+      <div>
+        <p class="kontakt-quote reveal">"Ich freue mich darauf, Sie kennenzulernen — ob als Partner, Investor oder Unternehmer. Gemeinsam können wir Projekte gestalten, die stabile Strukturen schaffen und nachhaltige Werte sichern."</p>
+        <div class="kontakt-author reveal">— Sam Plett, Founder & CEO</div>
+        <div class="kontakt-info">
+          <div class="ki-row reveal">
+            <div class="ki-icon"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg></div>
+            <div><div class="ki-label">Telefon</div><div class="ki-value">0176 57774982</div></div>
+          </div>
+          <div class="ki-row reveal">
+            <div class="ki-icon"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></div>
+            <div><div class="ki-label">E-Mail</div><div class="ki-value">info@samplett.de</div></div>
+          </div>
+          <div class="ki-row reveal">
+            <div class="ki-icon"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg></div>
+            <div><div class="ki-label">Website</div><div class="ki-value">www.samplett.de</div></div>
+          </div>
+          <div class="ki-row reveal">
+            <div class="ki-icon"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg></div>
+            <div><div class="ki-label">Adresse</div><div class="ki-value">Ebereschenring 60, 34346 Hann Münden</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="form-group"><label class="form-label">Name *</label><input class="form-input" type="text" placeholder="Max Mustermann" required></div>
+        <div class="form-group"><label class="form-label">E-Mail *</label><input class="form-input" type="email" placeholder="max@mustermann.de" required></div>
+        <div class="form-group"><label class="form-label">Telefon *</label><input class="form-input" type="tel" placeholder="+49 ..." required></div>
+        <div class="form-group"><label class="form-label">Ich bin *</label>
+          <select class="form-input">
+            <option style="background:#0B1E3A;">Privatinvestor</option>
+            <option style="background:#0B1E3A;">Institutioneller Anleger / Family Office</option>
+            <option style="background:#0B1E3A;">Makler / Partner</option>
+            <option style="background:#0B1E3A;">Immobilienverkäufer</option>
+            <option style="background:#0B1E3A;">Sonstiges</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Nachricht *</label><textarea class="form-textarea" placeholder="Ihr Anliegen..." required></textarea></div>
+        <!-- DSGVO Einwilligung -->
+        <div class="form-group" style="margin-top:4px;margin-bottom:22px;">
+          <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;user-select:none;">
+            <input type="checkbox" id="dsgvo-check" style="margin-top:3px;min-width:16px;height:16px;accent-color:#E8943A;cursor:pointer;">
+            <span style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.65;">Ich habe die <a href="https://www.samplett.de/datenschutz" target="_blank" style="color:#E8943A;text-decoration:none;border-bottom:1px solid rgba(232,148,58,.3);">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zur Bearbeitung meiner Anfrage zu. *</span>
+          </label>
+          <div id="dsgvo-error" style="font-size:11px;color:#e05050;margin-top:6px;padding-left:28px;display:none;">Bitte bestätigen Sie die Datenschutzerklärung.</div>
+        </div>
+        <div id="form-submit-btn" class="form-submit" onclick="submitForm()" style="display:inline-block;">Nachricht senden →</div>
+        <p style="font-size:11px;color:rgba(255,255,255,.2);margin-top:12px;">* Alle Felder sind Pflichtfelder · Sam Plett Beteiligung GmbH · HRB 206096 · Keine Anlageberatung.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <img class="footer-logo" src="images/logo.png" alt="Sam Plett">
+    <div class="footer-social">
+    <div class="fsl" title="Instagram" onclick="window.open('https://www.instagram.com/sam.plett','_blank')"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke-width="1.6"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="rgba(255,255,255,.35)" stroke="none"/></svg></div>
+    <div class="fsl" title="LinkedIn" onclick="window.open('https://www.linkedin.com/in/jetztmaklerwerden/','_blank')"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke-width="1.6"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
+  </div>
+  <div class="footer-mid">© 2025 Sam Plett Beteiligung GmbH · HRB 206096 · Ebereschenring 60, 34346 Hann Münden</div>
+  <div class="footer-right">www.samplett.de</div>
+</footer>
+<div class="imprint-bar">
+  <div style="display:flex;gap:20px;flex-wrap:wrap;">
+    <a href="https://www.samplett.de/impressum" target="_blank" class="imprint-link" style="text-decoration:none;">Impressum</a>
+    <a href="https://www.samplett.de/datenschutz" target="_blank" class="imprint-link" style="text-decoration:none;">Datenschutz</a>
+
+  </div>
+  <div style="font-size:10px;color:rgba(255,255,255,.12);">Diese Seite dient der Information und stellt keine Anlageberatung dar. Alle Angaben ohne Gewähr.</div>
+</div>
+
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  SAM PLETT — Immobilien  |  Main JS
+// ═══════════════════════════════════════════════════════════
+
+// ── 1. LOADER: hide after 1s (script runs at end of body) ──
+setTimeout(function() {
+  var loader = document.getElementById('loader');
+  if (loader) {
+    loader.style.transition = 'opacity 0.6s ease';
+    loader.style.opacity = '0';
+    setTimeout(function() {
+      if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
+    }, 700);
+  }
+}, 1000);
+
+// ── 2. NAVIGATION ──────────────────────────────────────────
+var SEC_IDS = ['hero','arbeitsweise','suchprofil','trackrecord','ueber','werte','zielgruppen','vertrauen','team','kontakt'];
+var navTabs = document.querySelectorAll('.nav-tab');
+var nav     = document.getElementById('nav');
+var menuOpen = false;
+
+function goTo(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+function toggleMenu() {
+  menuOpen = !menuOpen;
+  var mob = document.getElementById('navMobile');
+  var btn = document.getElementById('menuBtn');
+  if (mob) mob.classList.toggle('open', menuOpen);
+  if (btn) {
+    var spans = btn.querySelectorAll('span');
+    spans[0].style.transform = menuOpen ? 'rotate(45deg) translateY(7px)' : '';
+    spans[1].style.opacity   = menuOpen ? '0' : '1';
+    spans[2].style.transform = menuOpen ? 'rotate(-45deg) translateY(-7px)' : '';
+  }
+}
+function closeMenu() {
+  menuOpen = false;
+  var mob = document.getElementById('navMobile');
+  var btn = document.getElementById('menuBtn');
+  if (mob) mob.classList.remove('open');
+  if (btn) btn.querySelectorAll('span').forEach(function(s) { s.style.transform=''; s.style.opacity='1'; });
+}
+
+// ── 3. SCROLL HANDLER ──────────────────────────────────────
+var scrollTick = false;
+
+function onScroll() {
+  var y = window.scrollY;
+
+  // Nav scrolled state
+  if (nav) nav.classList.toggle('scrolled', y > 60);
+
+  // Progress bar
+  var pb = document.getElementById('progress-bar');
+  if (pb) {
+    var d = document.documentElement;
+    var pct = y / (d.scrollHeight - d.clientHeight) * 100;
+    pb.style.width = Math.min(pct, 100) + '%';
+  }
+
+  // Back to top
+  var btt = document.getElementById('btt');
+  if (btt) btt.classList.toggle('show', y > 400);
+
+  // Active nav tab
+  SEC_IDS.forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var r = el.getBoundingClientRect();
+    if (r.top <= 160 && r.bottom > 160) {
+      navTabs.forEach(function(t) { t.classList.remove('active'); });
+      if (navTabs[i]) navTabs[i].classList.add('active');
+    }
+  });
+
+  // Parallax
+  document.querySelectorAll('[data-px]').forEach(function(el) {
+    var spd = parseFloat(el.getAttribute('data-px')) || 0.35;
+    var r = el.parentElement.getBoundingClientRect();
+    if (r.bottom > 0 && r.top < window.innerHeight) {
+      el.style.transform = 'translateY(' + ((r.top + r.height/2 - window.innerHeight/2) * spd) + 'px)';
+    }
+  });
+  // Hero portrait parallax
+  var hp = document.querySelector('.hero-portrait img');
+  var hero = document.getElementById('hero');
+  if (hp && hero) {
+    var r = hero.getBoundingClientRect();
+    if (r.bottom > 0 && r.top < window.innerHeight) hp.style.transform = 'translateY(' + (r.top * 0.15) + 'px)';
+  }
+
+  // Reveal elements
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(function(el) {
+    if (el.getBoundingClientRect().top < window.innerHeight - 56) el.classList.add('in');
+  });
+
+  // Quote + banner text
+  document.querySelectorAll('.qsec-quote, .qsec-author, .bb-label, .bb-number, .bb-sub').forEach(function(el) {
+    var sec = el.closest ? el.closest('.quote-section, .big-banner') : null;
+    if (sec && sec.getBoundingClientRect().top < window.innerHeight - 80) el.classList.add('in');
+  });
+
+  // Stagger grids
+  document.querySelectorAll('.werte-grid, .zg-grid, .team-stats, .criteria-grid').forEach(function(g) {
+    if (g.getBoundingClientRect().top < window.innerHeight - 80) {
+      Array.from(g.children).forEach(function(c, i) {
+        setTimeout(function() { c.classList.add('in'); }, i * 75);
+      });
+    }
+  });
+
+  // Timeline
+  document.querySelectorAll('.tl-item').forEach(function(el, i) {
+    if (el.getBoundingClientRect().top < window.innerHeight - 40) {
+      setTimeout(function() { el.classList.add('in'); }, i * 55);
+    }
+  });
+
+  // Count-up stats
+  runCountUp();
+
+  scrollTick = false;
+}
+
+window.addEventListener('scroll', function() {
+  if (!scrollTick) { requestAnimationFrame(onScroll); scrollTick = true; }
+}, { passive: true });
+
+// ── 4. COUNT-UP ────────────────────────────────────────────
+var counted = false;
+function runCountUp() {
+  if (counted) return;
+  var strip = document.querySelector('.stats-strip');
+  if (!strip || strip.getBoundingClientRect().top > window.innerHeight) return;
+  counted = true;
+  var defs = [
+    { val:2.5,  pre:'+', suf:' Mrd.', dec:true  },
+    { val:1500, pre:'',  suf:'+',     dec:false },
+    { val:15,   pre:'+', suf:' Mio.', dec:false },
+    { val:2,    pre:'',  suf:'×',     dec:false }
+  ];
+  document.querySelectorAll('.stat-num').forEach(function(el, i) {
+    if (!defs[i]) return;
+    var d = defs[i], t0 = null, dur = 1800;
+    function frame(ts) {
+      if (!t0) t0 = ts;
+      var p = Math.min((ts - t0) / dur, 1);
+      var ease = 1 - Math.pow(1 - p, 4);
+      var v = d.val * ease;
+      el.innerHTML = d.pre + (d.dec ? v.toFixed(1) : Math.floor(v).toLocaleString('de-DE')) + '<span class="stat-unit">' + d.suf + '</span>';
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  });
+}
+
+// ── 5. MAGNETIC BUTTONS ────────────────────────────────────
+document.querySelectorAll('.btn-primary, .btn-outline, .nav-cta, .form-submit, #form-submit-btn').forEach(function(btn) {
+  btn.addEventListener('mousemove', function(e) {
+    var r = btn.getBoundingClientRect();
+    btn.style.transform = 'translate(' + (e.clientX - r.left - r.width/2) * 0.16 + 'px,' + (e.clientY - r.top - r.height/2) * 0.28 + 'px)';
+  });
+  btn.addEventListener('mouseleave', function() { btn.style.transform = ''; });
+});
+
+// ── 6. CUSTOM CURSOR (desktop only) ────────────────────────
+var cur = document.getElementById('cur');
+var curR = document.getElementById('cur-r');
+var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+if (!isTouch && cur && curR && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  document.addEventListener('mousemove', function(e) {
+    cur.style.opacity = '1'; curR.style.opacity = '1';
+    cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+    setTimeout(function() { curR.style.left = e.clientX + 'px'; curR.style.top = e.clientY + 'px'; }, 70);
+  });
+  document.querySelectorAll('.btn-primary,.btn-outline,.nav-tab,.nav-cta,.tr-card,.wert-card,.zg-card,.stat-item,.process-step,.fsl').forEach(function(el) {
+    el.addEventListener('mouseenter', function() { cur.classList.add('big'); curR.classList.add('big'); });
+    el.addEventListener('mouseleave', function() { cur.classList.remove('big'); curR.classList.remove('big'); });
+  });
+}
+
+// ── 7. BACK TO TOP ──────────────────────────────────────────
+var btt = document.getElementById('btt');
+if (btt) btt.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+// ── 8. INPUT RESET ON FOCUS ────────────────────────────────
+document.querySelectorAll('.form-input, .form-textarea').forEach(function(el) {
+  el.addEventListener('focus', function() { this.style.borderBottomColor = ''; this.style.borderColor = ''; });
+});
+
+// ── 9. INIT ────────────────────────────────────────────────
+setTimeout(function() {
+  onScroll();
+}, 150);
+
+// ── 10. PIPEDRIVE ──────────────────────────────────────────
+var PD_TOKEN = '41ddfe3e65929229fa23cf899db7a61b12865858';
+var PD_BASE  = 'https://api.pipedrive.com/v1';
+var PD_PIPELINE_NAME = 'Immo Kunden';
+var PD_STAGE_NAME    = 'Lead Organisch';
+var _pdPipelineId = null;
+var _pdStageId    = null;
+
+async function pdGet(path) {
+  var r = await fetch(PD_BASE + path + '?api_token=' + PD_TOKEN);
+  return r.json();
+}
+async function pdPost(path, body) {
+  var r = await fetch(PD_BASE + path + '?api_token=' + PD_TOKEN, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  return r.json();
+}
+async function getPipelineStageIds() {
+  if (_pdPipelineId && _pdStageId) return true;
+  try {
+    var pRes = await pdGet('/pipelines');
+    var pipes = (pRes.data || []);
+    var pipe = pipes.find(function(p) { return p.name === PD_PIPELINE_NAME; });
+    if (!pipe) pipe = pipes.find(function(p) { return p.name.toLowerCase().indexOf('immo') > -1; });
+    if (!pipe && pipes.length) pipe = pipes[0];
+    _pdPipelineId = pipe ? pipe.id : null;
+    var sRes = await pdGet('/stages');
+    var stages = (sRes.data || []);
+    var pipeStages = _pdPipelineId ? stages.filter(function(s) { return s.pipeline_id === _pdPipelineId; }) : stages;
+    var stage = pipeStages.find(function(s) { return s.name.toLowerCase().indexOf('organisch') > -1; });
+    if (!stage) stage = pipeStages.find(function(s) { return s.name.toLowerCase().indexOf('lead') > -1; });
+    if (!stage && pipeStages.length) stage = pipeStages[0];
+    _pdStageId = stage ? stage.id : null;
+    return true;
+  } catch(e) { console.error('Pipedrive lookup:', e); return false; }
+}
+
+function submitForm() {
+  var btn     = document.getElementById('form-submit-btn');
+  var nameEl  = document.querySelector('.form-input[type=text]');
+  var emailEl = document.querySelector('.form-input[type=email]');
+  var telEl   = document.querySelector('.form-input[type=tel]');
+  var typeEl  = document.querySelector('select.form-input');
+  var msgEl   = document.querySelector('.form-textarea');
+  var dsgvo   = document.getElementById('dsgvo-check');
+  var dsgvoErr= document.getElementById('dsgvo-error');
+
+  var ok = true;
+  function markErr(el, isTA) {
+    if (!el) return;
+    if (isTA) { el.style.borderColor = 'rgba(224,80,80,.6)'; }
+    else       { el.style.borderBottomColor = 'rgba(224,80,80,.8)'; }
+    if (ok) el.focus();
+    ok = false;
+  }
+  if (!nameEl  || !nameEl.value.trim())  markErr(nameEl);
+  if (!emailEl || !emailEl.value.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(emailEl.value.trim())) markErr(emailEl);
+  if (!telEl   || !telEl.value.trim())   markErr(telEl);
+  if (!msgEl   || !msgEl.value.trim())   markErr(msgEl, true);
+  if (dsgvo && !dsgvo.checked) { if (dsgvoErr) dsgvoErr.style.display = 'block'; ok = false; }
+  else if (dsgvoErr) dsgvoErr.style.display = 'none';
+  if (!ok) return;
+
+  btn.textContent = 'Wird gesendet…';
+  btn.style.pointerEvents = 'none';
+  btn.style.opacity = '0.7';
+
+  var name = nameEl.value.trim(), email = emailEl.value.trim();
+  var tel  = telEl.value.trim(),  type  = typeEl ? typeEl.value : '';
+  var msg  = msgEl.value.trim(),  now   = new Date().toLocaleString('de-DE');
+
+  getPipelineStageIds().then(function() {
+    return pdPost('/persons', {
+      name:  name,
+      email: [{ value: email, primary: true, label: 'work' }],
+      phone: [{ value: tel,   primary: true, label: 'work' }]
+    });
+  }).then(function(pRes) {
+    if (!pRes.success) throw new Error(pRes.error || 'Person error');
+    return pdPost('/deals', {
+      title:       name + ' — ' + type + ' (samplett.de/immobilien)',
+      person_id:   pRes.data.id,
+      pipeline_id: _pdPipelineId,
+      stage_id:    _pdStageId,
+      status:      'open'
+    }).then(function(dRes) {
+      if (!dRes.success) throw new Error(dRes.error || 'Deal error');
+      return pdPost('/notes', {
+        content:   '📋 Anfrage samplett.de/immobilien\n\n👤 ' + name + '\n📧 ' + email + '\n📞 ' + tel + '\n🏷 ' + type + '\n📅 ' + now + '\n\n💬 ' + msg,
+        deal_id:   dRes.data.id,
+        person_id: pRes.data.id
+      });
+    });
+  }).then(function() {
+    btn.textContent = '✓ Nachricht gesendet';
+    btn.style.background = 'linear-gradient(135deg,#1a5c3a,#2a7a50)';
+    btn.style.clipPath = 'none'; btn.style.opacity = '1';
+    [nameEl, emailEl, telEl, msgEl].forEach(function(el) { if (el) el.value = ''; });
+    if (typeEl) typeEl.selectedIndex = 0;
+    if (dsgvo)  dsgvo.checked = false;
+  }).catch(function(err) {
+    console.error('Pipedrive:', err);
+    btn.textContent = '✗ Fehler — bitte anrufen: 0176 57774982';
+    btn.style.background = 'linear-gradient(135deg,#7a2a2a,#a83a3a)';
+    btn.style.clipPath = 'none'; btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
+  });
+}
+
+</script>
+</body>
+</html>
