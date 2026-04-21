@@ -1347,45 +1347,7 @@ setTimeout(function() {
   onScroll();
 }, 150);
 
-// ── 10. PIPEDRIVE ──────────────────────────────────────────
-var PD_TOKEN = '41ddfe3e65929229fa23cf899db7a61b12865858';
-var PD_BASE  = 'https://api.pipedrive.com/v1';
-var PD_PIPELINE_NAME = 'Immo Kunden';
-var PD_STAGE_NAME    = 'Lead Organisch';
-var _pdPipelineId = null;
-var _pdStageId    = null;
-
-async function pdGet(path) {
-  var r = await fetch(PD_BASE + path + '?api_token=' + PD_TOKEN);
-  return r.json();
-}
-async function pdPost(path, body) {
-  var r = await fetch(PD_BASE + path + '?api_token=' + PD_TOKEN, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  return r.json();
-}
-async function getPipelineStageIds() {
-  if (_pdPipelineId && _pdStageId) return true;
-  try {
-    var pRes = await pdGet('/pipelines');
-    var pipes = (pRes.data || []);
-    var pipe = pipes.find(function(p) { return p.name === PD_PIPELINE_NAME; });
-    if (!pipe) pipe = pipes.find(function(p) { return p.name.toLowerCase().indexOf('immo') > -1; });
-    if (!pipe && pipes.length) pipe = pipes[0];
-    _pdPipelineId = pipe ? pipe.id : null;
-    var sRes = await pdGet('/stages');
-    var stages = (sRes.data || []);
-    var pipeStages = _pdPipelineId ? stages.filter(function(s) { return s.pipeline_id === _pdPipelineId; }) : stages;
-    var stage = pipeStages.find(function(s) { return s.name.toLowerCase().indexOf('organisch') > -1; });
-    if (!stage) stage = pipeStages.find(function(s) { return s.name.toLowerCase().indexOf('lead') > -1; });
-    if (!stage && pipeStages.length) stage = pipeStages[0];
-    _pdStageId = stage ? stage.id : null;
-    return true;
-  } catch(e) { console.error('Pipedrive lookup:', e); return false; }
-}
+// ── 10. PIPEDRIVE — Token & API im PHP-Proxy auf samplett.de ──────────────────
 
 function submitForm() {
   var btn     = document.getElementById('form-submit-btn');
@@ -1421,28 +1383,18 @@ function submitForm() {
   var tel  = telEl.value.trim(),  type  = typeEl ? typeEl.value : '';
   var msg  = msgEl.value.trim(),  now   = new Date().toLocaleString('de-DE');
 
-  getPipelineStageIds().then(function() {
-    return pdPost('/persons', {
-      name:  name,
-      email: [{ value: email, primary: true, label: 'work' }],
-      phone: [{ value: tel,   primary: true, label: 'work' }]
-    });
-  }).then(function(pRes) {
-    if (!pRes.success) throw new Error(pRes.error || 'Person error');
-    return pdPost('/deals', {
-      title:       name + ' — ' + type + ' (samplett.de/immobilien)',
-      person_id:   pRes.data.id,
-      pipeline_id: _pdPipelineId,
-      stage_id:    _pdStageId,
-      status:      'open'
-    }).then(function(dRes) {
-      if (!dRes.success) throw new Error(dRes.error || 'Deal error');
-      return pdPost('/notes', {
-        content:   '📋 Anfrage samplett.de/immobilien\n\n👤 ' + name + '\n📧 ' + email + '\n📞 ' + tel + '\n🏷 ' + type + '\n📅 ' + now + '\n\n💬 ' + msg,
-        deal_id:   dRes.data.id,
-        person_id: pRes.data.id
-      });
-    });
+    // Sende an PHP-Proxy auf samplett.de (verhindert CORS + versteckt API-Token)
+  fetch('https://www.samplett.de/pipedrive-proxy.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: name, email: email, phone: tel,
+      type: type, message: msg, source: 'samplett.de/immobilien'
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(res) {
+    if (!res.success) throw new Error(res.error || 'Unbekannter Fehler');
   }).then(function() {
     btn.textContent = '✓ Nachricht gesendet';
     btn.style.background = 'linear-gradient(135deg,#1a5c3a,#2a7a50)';
